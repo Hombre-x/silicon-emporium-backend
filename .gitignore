@@ -1,2 +1,11 @@
+# Intellij IDEA
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**.iws
+**.idea/dictionaries
+**.idea/vcs.xml
+**.idea/jsLibraryMappings.xml
+
+# Scala
 *.class
 *.log
