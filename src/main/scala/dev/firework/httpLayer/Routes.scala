@@ -1,32 +1,20 @@
 package dev.firework.httpLayer
 
-import cats._
-import cats.effect._
-import cats.implicits._
-import org.http4s.circe._
-import org.http4s._
-import io.circe.generic.auto._
-import io.circe.syntax._
-import org.http4s.dsl._
+import cats.Monad
+import org.http4s.HttpRoutes
 import org.http4s.dsl.impl._
-import org.http4s.headers._
-import org.http4s.implicits._
-import org.http4s.server._
+import org.http4s.dsl._
+
 
 object Routes:
 
-  def helloWorldRoutes[F[_] : Monad]: HttpRoutes[F] =
-    
-    val dsl = new Http4sDsl[F]{}
-    
-    import dsl._
-    
-    HttpRoutes.of[F]{
-        case GET -> Root / "hello" / name =>
-          Ok(s"{hello : $name}")
-      }
-    
-  end helloWorldRoutes
+  def helloWorldRoutes[F[_]: Monad]: HttpRoutes[F] =
 
-end Routes
+    val dsl = new Http4sDsl[F] {}
 
+    import dsl.*
+
+    HttpRoutes.of[F] {
+      case GET -> Root / "hello" / name =>
+        Ok(s"{hello : $name}")
+    }
