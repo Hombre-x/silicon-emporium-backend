@@ -15,6 +15,8 @@ import dev.firework.httpLayer.Routes.*
 
 object Main extends IOApp:
   
+  given Logger[IO] = Slf4jLogger.getLogger
+  
   def finalHelloWorldRoutes[F[_] : Monad]: HttpApp[F] =
     helloWorldRoutes[F].orNotFound
   
@@ -25,6 +27,7 @@ object Main extends IOApp:
       .withHost(ipv4"0.0.0.0")
       .withPort(port"8080")
       .withHttpApp(finalHelloWorldRoutes)
+      .withLogger(Logger[IO])
       .build
       .use(_ => IO.never)
       .as(ExitCode.Success)

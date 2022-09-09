@@ -16,7 +16,9 @@ lazy val root = (project in file("."))
       "org.http4s"    %% "http4s-dsl"     % "0.23.15",
       "org.http4s"    %% "http4s-core"    % "0.23.15",
       "org.http4s"    %% "http4s-circe"   % "0.23.15",
-      "org.http4s"    %% "http4s-ember-server" % "0.23.15",
-      "ch.qos.logback"  %  "logback-classic"     % "1.2.11"
+      "org.http4s"    %% "http4s-ember-server"   % "0.23.15",
+      // Java libs
+      "ch.qos.logback"  % "logback-classic"      % "1.2.11",
+      "org.jsoup"       % "jsoup"                % "1.15.3"
     )
 )
