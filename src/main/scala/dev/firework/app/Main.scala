@@ -11,14 +11,11 @@ import org.http4s.HttpApp
 import org.http4s.implicits._
 import org.http4s.ember.server.EmberServerBuilder
 
-import dev.firework.httpLayer.Routes.*
+import dev.firework.httpLayer.Controller.*
 
 object Main extends IOApp:
   
-  given Logger[IO] = Slf4jLogger.getLogger
-  
-  def finalHelloWorldRoutes[F[_] : Monad]: HttpApp[F] =
-    helloWorldRoutes[F].orNotFound
+  given logger: Logger[IO] = Slf4jLogger.getLogger
   
   override def run(args: List[String]): IO[ExitCode] =
     
@@ -26,7 +23,7 @@ object Main extends IOApp:
       .default[IO]
       .withHost(ipv4"0.0.0.0")
       .withPort(port"8080")
-      .withHttpApp(finalHelloWorldRoutes)
+      .withHttpApp(allRoutesApp)
       .withLogger(Logger[IO])
       .build
       .use(_ => IO.never)
