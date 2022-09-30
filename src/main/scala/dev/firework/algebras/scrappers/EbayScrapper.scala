@@ -1,25 +1,26 @@
 package dev.firework.algebras.scrappers
 
 import cats.effect.Sync
-import cats.syntax.all._
+import cats.syntax.all.*
+
 import org.jsoup.Jsoup
-import dev.firework.domain.scrapper.*
 import org.jsoup.nodes.Element
 
+import dev.firework.domain.scrapper.*
+import dev.firework.domain.search.*
 trait EbayScrapper[F[_]] extends Scrapper[F]
 
 object EbayScrapper:
-  
-  def impl[F[_] : Sync]: Scrapper[F] = new Scrapper[F]:
-      
+
+  def impl[F[_]: Sync]: Scrapper[F] = new Scrapper[F]:
+
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
-      val url = raw"https://www.ebay.com/sch/i.html?_nkw=$userQuery"
-      val titleClassName = "Yeah"
-      val priceClassName = "Hell"
+      val url            = raw"https://www.ebay.com/sch/i.html?_nkw=$userQuery"
 
       val connectionDoc =
         Sync[F].delay(
-          Jsoup.connect(url)
+          Jsoup
+            .connect(url)
             .get()
             .getElementsByClass("s-item s-item__pl-on-bottom")
             .get(1)
@@ -30,7 +31,7 @@ object EbayScrapper:
       val titleContainer =
         for
           container: Element <- connectionDoc
-          title <-
+          title              <-
             Sync[F].delay(
               container
                 .getElementsByClass("s-item__info clearfix")
@@ -40,11 +41,12 @@ object EbayScrapper:
                 .text()
             )
         yield title
-
+      
+      
       val priceContainer =
         for
           container: Element <- connectionDoc
-          price <-
+          price              <-
             Sync[F].delay(
               container
                 .getElementsByClass("s-item__detail s-item__detail--primary")
@@ -56,11 +58,9 @@ object EbayScrapper:
         yield price
 
       for
-        title <- titleContainer
-        price <- priceContainer
-        result <- Sync[F].pure(s"($title, $price)").attempt
+        title  <- titleContainer
+        price  <- priceContainer
+        result <- Sync[F].pure(Item(title, price, "eBay")).attempt
       yield result
-  
+
 end EbayScrapper
-
-

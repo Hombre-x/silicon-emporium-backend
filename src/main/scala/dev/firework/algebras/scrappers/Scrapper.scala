@@ -8,6 +8,7 @@ import dev.firework.domain.scrapper._
 
 
 trait Scrapper[F[_]]:
+  
   def getMatchedElement (userQuery: UserQuery): F[ScrapperResult]
 
 end Scrapper

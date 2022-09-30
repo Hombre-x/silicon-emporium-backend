@@ -1,13 +1,13 @@
 package dev.firework.algebras.scrappers
 
-import cats.effect.{Async, Sync}
+import cats.effect.Sync
 import cats.syntax.all._
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
 import dev.firework.domain.scrapper._
-
+import dev.firework.domain.search._
 
 trait MLScrapper[F[_]] extends Scrapper[F]
 
@@ -27,21 +27,16 @@ object MLScrapper:
             .get()
             .getElementsByClass("ui-search-result__wrapper")
             .get(0)
-            .getElementsByClass("ui-search-result__content-wrapper shops-custom-secondary-font")
-            .get(0)
         )
-        
-      val finalTest =
-        for
-          container: Element <- connectionDoc
-          title     <-
-            Sync[F].delay(container.getElementsByClass(titleClassName).get(0).text())
-          price     <-
-            Sync[F].delay(container.getElementsByClass(priceClassName).get(0).text())
-          result    <- Sync[F].pure(s"($title, $price)").attempt
-        yield result
-        
-      finalTest
+      
+      for
+        container: Element <- connectionDoc
+        title     <-
+          Sync[F].delay(container.getElementsByClass(titleClassName).get(0).text())
+        price     <-
+          Sync[F].delay(container.getElementsByClass(priceClassName).get(0).text())
+        result    <- Sync[F].pure(Item(title, price, "Mercado Libre")).attempt
+      yield result
       
     end getMatchedElement
     
