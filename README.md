@@ -1,8 +1,8 @@
-# Silicon Emporium
+# Silicon Emporium Backend
 
 ---
 
-Silicon Emporium is a site that allows you to keep track of the parts you need for your PC. Whether it's to find the cheapest place to buy any of your components, or to find out if there is stock available or not.
+Here you will find the backend of Slicon Emporium
 
-The application is built on top of http4s and Scala 3 together with Angular.js and Typescript.
+The application is mostly implemented by the Typelevel stack and associated partners. Ranging from http4s for the HTTP layer, to Cats Effect 3 for effectful computations via type classes and concurrency handling.
 
