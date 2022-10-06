@@ -23,6 +23,7 @@ object Controller:
     import dsl.*
 
     HttpRoutes.of[F] {
+          
       case GET -> Root / "hello" / name =>
         Ok(s"{hello : $name}")
     }

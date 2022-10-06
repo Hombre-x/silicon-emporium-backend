@@ -6,6 +6,18 @@
 **.idea/vcs.xml
 **.idea/jsLibraryMappings.xml
 
+*.null/*
+*.null/**
+
+*.metals/*
+*.metals/**
+
+*.bloop/*
+*.bloop/**
+
+*.vscode/*
+*.vscode/**
+
 # Scala
 *.class
 *.log

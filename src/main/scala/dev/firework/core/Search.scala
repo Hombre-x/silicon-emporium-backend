@@ -15,8 +15,8 @@ case class Search[F[_] : Sync : Parallel](query: NonEmptyString):
     List(
       AmazonScrapper.impl[F],
       EbayScrapper.impl[F],
-      MLScrapper.impl[F]
-//      BestbuyScrapper.impl[F]
+      MLScrapper.impl[F],
+      BestbuyScrapper.impl[F]
     )
   
   def perform: F[List[ScrapperResult]] =

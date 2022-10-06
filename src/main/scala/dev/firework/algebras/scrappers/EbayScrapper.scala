@@ -14,8 +14,12 @@ object EbayScrapper:
 
   def impl[F[_]: Sync]: Scrapper[F] = new Scrapper[F]:
 
+    override def formatPrice(price: String): Currency =
+      price.filter(ch => ch.isDigit || ch == '.').toFloat
+    
+    
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
-      val url            = raw"https://www.ebay.com/sch/i.html?_nkw=$userQuery"
+      val url = raw"https://www.ebay.com/sch/i.html?_nkw=$userQuery"
 
       val connectionDoc =
         Sync[F].delay(
@@ -28,7 +32,7 @@ object EbayScrapper:
             .get(0)
         )
 
-      val titleContainer =
+      val titleContainer: F[String] =
         for
           container: Element <- connectionDoc
           title              <-
@@ -43,7 +47,7 @@ object EbayScrapper:
         yield title
       
       
-      val priceContainer =
+      val priceContainer: F[String] =
         for
           container: Element <- connectionDoc
           price              <-
@@ -60,7 +64,7 @@ object EbayScrapper:
       for
         title  <- titleContainer
         price  <- priceContainer
-        result <- Sync[F].pure(Item(title, price, "eBay")).attempt
+        result <- Sync[F].pure(Item(title, formatPrice(price), "eBay")).attempt
       yield result
 
 end EbayScrapper

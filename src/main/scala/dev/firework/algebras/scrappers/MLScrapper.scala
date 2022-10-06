@@ -14,6 +14,9 @@ trait MLScrapper[F[_]] extends Scrapper[F]
 object MLScrapper:
   
   def impl[F[_] : Sync]: Scrapper[F] = new Scrapper[F]:
+
+    override def formatPrice(price: String): Currency = 
+      price.filter(_.isDigit).toFloat
       
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
       
@@ -21,7 +24,7 @@ object MLScrapper:
       val titleClassName = "ui-search-item__title shops__item-title"
       val priceClassName = "price-tag-text-sr-only"
       
-      val connectionDoc =
+      val connectionDoc = 
         Sync[F].delay(
           Jsoup.connect(url)
             .get()
@@ -35,10 +38,10 @@ object MLScrapper:
           Sync[F].delay(container.getElementsByClass(titleClassName).get(0).text())
         price     <-
           Sync[F].delay(container.getElementsByClass(priceClassName).get(0).text())
-        result    <- Sync[F].pure(Item(title, price, "Mercado Libre")).attempt
+        result    <- Sync[F].pure(Item(title, formatPrice(price), "Mercado Libre")).attempt
       yield result
       
-    end getMatchedElement
+    end getMatchedElement 
     
   end impl
   
