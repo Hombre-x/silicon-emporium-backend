@@ -8,9 +8,6 @@ import dev.firework.domain.scrapper._
 
 
 trait Scrapper[F[_]]:
-  
-  def formatPrice(price: String): Currency
-  
   def getMatchedElement (userQuery: UserQuery): F[ScrapperResult]
 
 end Scrapper

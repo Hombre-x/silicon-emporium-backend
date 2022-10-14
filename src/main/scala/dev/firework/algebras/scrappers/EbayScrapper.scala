@@ -1,24 +1,24 @@
 package dev.firework.algebras.scrappers
 
-import cats.effect.Sync
+import cats.effect.{Async, Sync}
+import cats.{NonEmptyParallel, Parallel}
 import cats.syntax.all.*
-
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-
 import dev.firework.domain.scrapper.*
 import dev.firework.domain.search.*
 trait EbayScrapper[F[_]] extends Scrapper[F]
 
 object EbayScrapper:
 
-  def impl[F[_]: Sync]: Scrapper[F] = new Scrapper[F]:
+  def impl[F[_]: Sync : Parallel]: Scrapper[F] = new Scrapper[F]:
 
-    override def formatPrice(price: String): Currency =
-      price.filter(ch => ch.isDigit || ch == '.').toFloat
+    def formatPrice(price: String): Either[Throwable, Currency] =
+      Either.catchNonFatal(price.filter(ch => ch.isDigit || ch == '.').toFloat)
     
     
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
+      
       val url = raw"https://www.ebay.com/sch/i.html?_nkw=$userQuery"
 
       val connectionDoc =
@@ -31,6 +31,7 @@ object EbayScrapper:
             .getElementsByClass("s-item__info clearfix")
             .get(0)
         )
+        
 
       val titleContainer: F[String] =
         for
@@ -60,11 +61,14 @@ object EbayScrapper:
                 .text()
             )
         yield price
+        
 
-      for
-        title  <- titleContainer
-        price  <- priceContainer
-        result <- Sync[F].pure(Item(title, formatPrice(price), "eBay")).attempt
-      yield result
+      val result: F[Item] =  for
+        t  <- (titleContainer, priceContainer).parTupled
+        (title, price) = t
+        formattedPrice <- formatPrice(price).liftTo[F]
+      yield Item(title, formattedPrice, "ebay")
+      
+      result.attempt
 
 end EbayScrapper

@@ -153,6 +153,8 @@ project/**/metals.sbt
 
 dist/*
 target/
+project/
+!project/build.properties
 lib_managed/
 src_managed/
 project/boot/

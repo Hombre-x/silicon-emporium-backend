@@ -1,4 +1,4 @@
-package dev.firework.httpLayer.routes
+package dev.firework.http.routes
 
 import cats.effect.Sync
 import cats.syntax.all.*
@@ -22,7 +22,7 @@ import org.http4s.server.Router
 import org.http4s.{HttpApp, HttpRoutes}
 
 
-class SearchRoutes[F[_]: Sync: Parallel: Logger] extends Http4sDsl[F]:
+class SearchRoutes[F[_]: Sync : Parallel : Logger] extends Http4sDsl[F]:
 
   private val prefixPath = "/search"
 
