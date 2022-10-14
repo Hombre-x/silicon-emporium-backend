@@ -22,8 +22,8 @@ case class Search[F[_] : Sync : Parallel](query: NonEmptyString):
   def perform: F[List[ScrapperResult]] =
     scrappers.parTraverse(scrapp => scrapp.getMatchedElement(query))
     
-  def performTest: F[List[Unit]] =
-    scrappers.parTraverse(_ => Sync[F].delay("Testing...").debug.void)
+//  def performTest: F[List[Unit]] =
+//    scrappers.parTraverse(_ => Sync[F].delay("Testing...").debug.void)
     
   def separateErrors(eitherList: List[ScrapperResult]): (ErrorLog, List[Item]) =
     eitherList.foldLeft((List.empty[String], List.empty[Item])) ( (accum, next) =>
