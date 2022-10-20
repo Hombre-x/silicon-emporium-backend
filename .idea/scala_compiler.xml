@@ -5,6 +5,10 @@
     <option name="existentials" value="true" />
     <option name="macros" value="true" />
     <option name="experimental" value="true" />
-    <profile name="sbt 1" modules="silicon-emporium" />
+    <profile name="sbt 1" modules="silicon-emporium">
+      <parameters>
+        <parameter value="-Ywarn-unused" />
+      </parameters>
+    </profile>
   </component>
 </project>

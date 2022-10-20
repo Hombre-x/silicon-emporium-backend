@@ -12,7 +12,7 @@ object BestbuyScrapper:
   
   def impl[F[_] : Sync]: Scrapper[F] = new Scrapper[F]:
 
-    override def formatPrice(price: String): Currency = ???
+    def formatPrice(price: String): Currency = ???
     
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
       Sync[F].attempt(

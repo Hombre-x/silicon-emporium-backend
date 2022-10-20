@@ -1,4 +1,4 @@
-package dev.firework.httpLayer
+package dev.firework.http
 
 import cats.Monad
 import cats.effect.Sync
@@ -13,7 +13,7 @@ import org.http4s.dsl.*
 import eu.timepit.refined.types.string.NonEmptyString
 
 import dev.firework.core.Search
-import dev.firework.httpLayer.routes.SearchRoutes
+import dev.firework.http.routes.SearchRoutes
 object Controller:
 
   def helloWorldRoutes[F[_] : Monad]: HttpRoutes[F] =

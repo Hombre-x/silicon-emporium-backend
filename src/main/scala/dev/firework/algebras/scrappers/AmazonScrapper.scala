@@ -12,7 +12,7 @@ object AmazonScrapper:
 
   def impl[F[_] : Sync]: Scrapper[F] = new Scrapper[F]:
 
-    override def formatPrice(price: String): Currency = ???
+    def formatPrice(price: String): Currency = ???
 
     // TODO: Amazon detects it is a bot, so refuses the connection
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
