@@ -3,30 +3,27 @@ package dev.firework.http.routes
 import cats.effect.Sync
 import cats.syntax.all.*
 import cats.{Monad, Parallel}
-import org.typelevel.log4cats.Logger
-
 import dev.firework.algebras.scrappers.Scrapper
 import dev.firework.core.Search
 import dev.firework.domain.scrapper.ScrapperResult
 import dev.firework.domain.search.Item
 import dev.firework.instances.ItemInstances.given
-
 import eu.timepit.refined.types.string.NonEmptyString
-
 import io.circe.syntax.*
-
 import org.http4s.circe.*
+import org.http4s.client.Client
 import org.http4s.dsl.*
 import org.http4s.dsl.impl.*
 import org.http4s.server.Router
 import org.http4s.{HttpApp, HttpRoutes}
+import org.typelevel.log4cats.Logger
 
 
 class SearchRoutes[F[_]: Sync : Parallel : Logger] extends Http4sDsl[F]:
 
   private val prefixPath = "/search"
 
-  private val httpRoutes: HttpRoutes[F] =
+  private def httpRoutes: HttpRoutes[F] =
     
     HttpRoutes.of[F] {
       
