@@ -8,5 +8,6 @@ import dev.firework.domain.search._
 object ItemInstances:
   
   given ItemEncoder: Encoder[Item] = deriveEncoder
+  given ItemDecoder: Decoder[Item] = deriveDecoder
   
 end ItemInstances
