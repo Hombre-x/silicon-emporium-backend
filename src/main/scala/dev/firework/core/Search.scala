@@ -4,22 +4,24 @@ import cats.Parallel
 import cats.effect.Sync
 import cats.syntax.all.*
 import dev.firework.algebras.scrappers.*
+import dev.firework.amenities.AppClients
 import dev.firework.domain.scrapper.*
-import dev.firework.domain.search._
-import dev.firework.utils.DebugUtils._
+import dev.firework.domain.search.*
+import dev.firework.utils.DebugUtils.*
 import eu.timepit.refined.types.string.NonEmptyString
+import org.http4s.client.Client
 
-case class Search[F[_] : Sync : Parallel](query: NonEmptyString):
+case class Search[F[_] : Sync : Parallel](clients: AppClients[F]):
   
   private val scrappers: List[Scrapper[F]] =
     List(
       AmazonScrapper.impl[F],
       EbayScrapper.impl[F],
       MLScrapper.impl[F],
-      BestbuyScrapper.impl[F]
+      BestbuyScrapper.impl[F](clients.bestBuyClient)
     )
   
-  def perform: F[List[ScrapperResult]] =
+  def perform(query: UserQuery): F[List[ScrapperResult]] =
     scrappers.parTraverse(scrapp => scrapp.getMatchedElement(query))
     
 //  def performTest: F[List[Unit]] =

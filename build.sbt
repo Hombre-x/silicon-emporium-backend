@@ -17,6 +17,8 @@ lazy val root = (project in file("."))
       
       // Circe
       "io.circe"      %% "circe-generic"       % "0.14.3",
+      "io.circe"      %% "circe-parser"        % "0.14.3",
+      
       
       // http4s
       "org.http4s"    %% "http4s-dsl"          % "0.23.16",
@@ -36,7 +38,6 @@ lazy val root = (project in file("."))
     ),
 
     scalacOptions ++= Seq(
-      "-Ywarn-unused",
-      
+    
     )
   )
