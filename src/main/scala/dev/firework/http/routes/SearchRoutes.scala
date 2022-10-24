@@ -8,18 +8,25 @@ import dev.firework.core.Search
 import dev.firework.domain.scrapper.ScrapperResult
 import dev.firework.domain.search.Item
 import dev.firework.instances.ItemInstances.given
+
 import eu.timepit.refined.types.string.NonEmptyString
+import eu.timepit.refined.auto._
+
 import io.circe.syntax.*
+
 import org.http4s.circe.*
 import org.http4s.client.Client
 import org.http4s.dsl.*
 import org.http4s.dsl.impl.*
 import org.http4s.server.Router
 import org.http4s.{HttpApp, HttpRoutes}
+
 import org.typelevel.log4cats.Logger
 
 
-class SearchRoutes[F[_]: Sync : Parallel : Logger] extends Http4sDsl[F]:
+case class SearchRoutes[F[_]: Sync : Parallel : Logger](
+    search: Search[F]
+) extends Http4sDsl[F]:
 
   private val prefixPath = "/search"
 
@@ -33,11 +40,8 @@ class SearchRoutes[F[_]: Sync : Parallel : Logger] extends Http4sDsl[F]:
         
         res match
           case Right(value) =>
-            
-            val search = Search[F](value)
-            
             for
-              results <- search.perform
+              results <- search.perform(value)
               separated = search.separateErrors(results) 
               _        <- Logger[F].info(s"${separated._1}")
               resp <- Ok(separated._2.asJson)

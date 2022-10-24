@@ -5,12 +5,12 @@ import cats.syntax.all.*
 
 import org.http4s.client.*
 import org.http4s.*
-import org.http4s.implicits.uri
+import org.http4s.implicits.*
 import org.http4s.Uri
-import org.http4s.circe.*
-import org.http4s.client.dsl.Http4sClientDsl
+import org.http4s.circe.CirceEntityDecoder.circeEntityDecoder
 
 import io.circe.Json
+import io.circe.HCursor
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto.*
 
@@ -20,39 +20,56 @@ import eu.timepit.refined.types.string.NonEmptyString
 
 
 import dev.firework.domain.scrapper.{ScrapperResult, UserQuery}
-import dev.firework.domain.search.Item
+import dev.firework.domain.search.{Item, BestBuyItem}
+import dev.firework.instances.ItemInstances.given
 
 
 trait BestBuyClient[F[_]]:
   
-  def getMatchedElement(userQuery: UserQuery): F[ScrapperResult]
+  def getItem(userQuery: UserQuery): F[ScrapperResult]
   
 end BestBuyClient
 
 
 object BestBuyClient:
   
-  def impl[F[_] : Concurrent](client: Client[F]): BestBuyClient[F] = new BestBuyClient[F]:
+  def make[F[_] : Concurrent](client: Client[F]): BestBuyClient[F] = new BestBuyClient[F]:
     
     private val apiKey = "qhqws47nyvgze2mq3qx4jadt"
     
-    private def formatQuery(query: UserQuery): UserQuery =
-      query.toString.split(' ')
-        .map(str => s"&search=$str")
-        .tail
-        .mkString
-        .asInstanceOf[NonEmptyString] // TODO: Change this implementation to something better
-      
-    private def formatResponse(response: Json): Json = ???
-      
-    private val queryUri: UserQuery => Uri = query => ???
-//      uri"""https://api.bestbuy.com/v1/products(${formatQuery(query)})?format=json&pageSize=1&show=name,salePrice&apiKey=qhqws47nyvgze2mq3qx4jadt"""
-      
+    private val baseUrl = raw"https://api.bestbuy.com/v1/products"
     
-    override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
-      Item("Test", 0F, "eBay").pure[F].attempt
+    private val urlParams = raw"?format=json&pageSize=1&show=name,salePrice,url&apiKey=$apiKey"
+    
+    private def formatQuery(query: UserQuery): UserQuery =
+      query.split(' ')
+        .map(str => s"&search=$str")
+        .mkString
+        .tail
       
-//      client.expect[String](queryUri(userQuery)).attempt
+    private def queryUri(query: UserQuery): Uri =
+      Uri.fromString(raw"""$baseUrl(${formatQuery(query)})$urlParams""")
+        .getOrElse(uri"/")
+      
+      
+    private def formatResponse(response: Json): Either[Throwable, Item] =
+      
+      val cursor: HCursor = response.hcursor
+      
+      val bestBuyItem = cursor.downField("products").downArray.as[BestBuyItem]
+      
+      bestBuyItem.map(item => Item(item.name, item.salePrice, item.url))
+      
+    end formatResponse
+    
+
+    override def getItem(userQuery: UserQuery): F[ScrapperResult] =
+      for
+        response: Either[Throwable, Json] <-
+          client.expect[Json](queryUri(userQuery)).attempt
+        maybeItem = response.flatMap(jsonItem => formatResponse(jsonItem))
+      yield maybeItem
+      
   
 end BestBuyClient
 
