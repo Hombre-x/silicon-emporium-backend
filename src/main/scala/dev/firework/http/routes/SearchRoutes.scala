@@ -29,25 +29,28 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
 ) extends Http4sDsl[F]:
 
   private val prefixPath = "/search"
+  
+  private object OptionalSearchQueryParamMatcher
+    extends OptionalQueryParamDecoderMatcher[String]("keywords")
 
+  // GET /search/query?keywords=Nvidia GeForce 3090 TI
   private def httpRoutes: HttpRoutes[F] =
     
     HttpRoutes.of[F] {
       
-      case GET -> Root / query =>
+      case GET -> Root / "query" :? OptionalSearchQueryParamMatcher(maybeQuery) =>
         
-        val res = NonEmptyString from query
-        
-        res match
-          case Right(value) =>
+        maybeQuery match
+          case Some(query) =>
+            
             for
-              results <- search.perform(value)
-              separated = search.separateErrors(results) 
+              results <- search.perform(query)
+              separated = search.separateErrors(results)
               _        <- Logger[F].info(s"${separated._1}")
               resp <- Ok(separated._2.asJson)
-            yield resp            
-            
-          case Left(_) => BadRequest("Can't perform an empty query")
+            yield resp
+
+          case None => BadRequest("Can't perform an empty query")
     }
 
   end httpRoutes
