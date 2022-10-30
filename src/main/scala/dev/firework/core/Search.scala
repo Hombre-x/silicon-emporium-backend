@@ -7,7 +7,7 @@ import dev.firework.algebras.scrappers.*
 import dev.firework.amenities.AppClients
 import dev.firework.domain.scrapper.*
 import dev.firework.domain.search.*
-import dev.firework.utils.DebugUtils.*
+import dev.firework.utils.debug
 import eu.timepit.refined.types.string.NonEmptyString
 import org.http4s.client.Client
 

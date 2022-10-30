@@ -33,11 +33,11 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
   private object OptionalSearchQueryParamMatcher
     extends OptionalQueryParamDecoderMatcher[String]("keywords")
 
-  // GET /search/query?keywords=Nvidia GeForce 3090 TI
   private def httpRoutes: HttpRoutes[F] =
-    
+
     HttpRoutes.of[F] {
-      
+
+      // GET -> search/query?keywords=Nvidia GeForce 3090 TI
       case GET -> Root / "query" :? OptionalSearchQueryParamMatcher(maybeQuery) =>
         
         maybeQuery match
