@@ -10,6 +10,6 @@ object scrapper:
   type Currency = Float
   type ScrapperResult = Either[Throwable, Item]
   type ErrorLog = List[String]
-  type UserQuery = NonEmptyString
+  type UserQuery = String 
   
 end scrapper

@@ -1,21 +1,20 @@
 package dev.firework.algebras.scrappers
 
+import cats.Parallel
 import cats.effect.Sync
-import cats.syntax.all._
-
+import cats.syntax.all.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-
-import dev.firework.domain.scrapper._
-import dev.firework.domain.search._
+import dev.firework.domain.scrapper.*
+import dev.firework.domain.search.*
 
 trait MLScrapper[F[_]] extends Scrapper[F]
 
 object MLScrapper:
   
-  def impl[F[_] : Sync]: Scrapper[F] = new Scrapper[F]:
+  def impl[F[_] : Sync : Parallel]: Scrapper[F] = new Scrapper[F]:
 
-    override def formatPrice(price: String): Currency = 
+    def formatPrice(price: String): Currency =
       price.filter(_.isDigit).toFloat
       
     override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
@@ -31,15 +30,31 @@ object MLScrapper:
             .getElementsByClass("ui-search-result__wrapper")
             .get(0)
         )
+        
+      val titleContainer: F[String] = for
+        container <- connectionDoc
+        title <-
+          Sync[F].delay(
+            container.getElementsByClass(titleClassName).get(0).text()
+          )
+      yield title
+        
+      val priceContainer: F[String] = for
+        container <- connectionDoc
+        price <-
+          Sync[F].delay(
+            container.getElementsByClass(priceClassName).get(0).text()
+          )
+      yield price
       
-      for
-        container: Element <- connectionDoc
-        title     <-
-          Sync[F].delay(container.getElementsByClass(titleClassName).get(0).text())
-        price     <-
-          Sync[F].delay(container.getElementsByClass(priceClassName).get(0).text())
-        result    <- Sync[F].pure(Item(title, formatPrice(price), "Mercado Libre")).attempt
-      yield result
+      
+      val result: F[Item] =
+        for
+          tup <- (titleContainer, priceContainer).parTupled
+          (title, price) = tup
+        yield Item(title, formatPrice(price), "Mercado Libre")
+        
+      result.attempt
       
     end getMatchedElement 
     
