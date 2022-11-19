@@ -2,7 +2,9 @@ package dev.firework.amenities
 
 import cats.effect.Async
 import cats.effect.kernel.Resource
+
 import com.comcast.ip4s.*
+
 import org.http4s.HttpApp
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Server
@@ -21,7 +23,7 @@ object MkHttpServer:
       EmberServerBuilder
         .default[F]
         .withHost(ipv4"0.0.0.0")
-        .withPort(port"8080")
+        .withPort(port"8000")
         .withHttpApp(app)
         .build
   

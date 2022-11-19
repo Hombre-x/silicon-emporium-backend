@@ -3,11 +3,8 @@ package dev.firework.http.routes
 import cats.effect.Sync
 import cats.syntax.all.*
 import cats.{Monad, Parallel}
-import dev.firework.algebras.scrappers.Scrapper
-import dev.firework.core.Search
-import dev.firework.domain.scrapper.ScrapperResult
-import dev.firework.domain.search.Item
-import dev.firework.instances.ItemInstances.given
+
+import org.typelevel.log4cats.Logger
 
 import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.auto._
@@ -21,8 +18,11 @@ import org.http4s.dsl.impl.*
 import org.http4s.server.Router
 import org.http4s.{HttpApp, HttpRoutes}
 
-import org.typelevel.log4cats.Logger
-
+import dev.firework.algebras.scrappers.Scrapper
+import dev.firework.core.Search
+import dev.firework.domain.scrapper.ScrapperResult
+import dev.firework.domain.search.Item
+import dev.firework.instances.ItemInstances.given
 
 case class SearchRoutes[F[_]: Sync : Parallel : Logger](
     search: Search[F]
@@ -41,8 +41,7 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
       case GET -> Root / "query" :? OptionalSearchQueryParamMatcher(maybeQuery) =>
         
         maybeQuery match
-          case Some(query) =>
-            
+          case Some(query) if query.nonEmpty =>
             for
               results <- search.perform(query)
               separated = search.separateErrors(results)
@@ -51,6 +50,7 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
             yield resp
 
           case None => BadRequest("Can't perform an empty query")
+          case _    => BadRequest("Can't perform an empty query")
     }
 
   end httpRoutes
