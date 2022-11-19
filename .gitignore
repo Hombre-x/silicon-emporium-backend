@@ -4,3 +4,5 @@
 .bsp/
 .vscode/
 .idea/
+.env
+null/
