@@ -1,8 +1,10 @@
 **/target/
 **/.bloop/
+**/test/
 .metals/
 .bsp/
 .vscode/
 .idea/
 .env
+
 null/

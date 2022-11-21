@@ -1,4 +1,4 @@
-ThisBuild / version := "0.1.3"
+ThisBuild / version := "0.1.4"
 
 ThisBuild / scalaVersion := "3.2.0"
 
@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
     name := "silicon-emporium-backend",
     dockerRepository := Some("ghcr.io"),
     dockerUsername := Some("hombre-x"),
-    dockerExposedPorts += sys.env.get("SE_API_HTTP_PORT").map(_.toInt).getOrElse(8000),
+    dockerExposedPorts += 80,
     dockerBaseImage := "openjdk:19",
     libraryDependencies ++= Seq(
 
@@ -55,6 +55,7 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % "1.4.4",
       "org.jsoup"      % "jsoup"           % "1.15.3"
     ),
+    
     scalacOptions ++= Seq(
     )
   )

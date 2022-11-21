@@ -1,1 +1,1 @@
-FROM ghcr.io/hombre-x/silicon-emporium-backend:0.1.3
+FROM ghcr.io/hombre-x/silicon-emporium-backend:0.1.4
