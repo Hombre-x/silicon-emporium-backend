@@ -4,14 +4,19 @@ import cats.effect.std.Console
 import cats.effect.{Concurrent, Resource}
 import cats.syntax.flatMap.*
 import cats.syntax.option.*
-import dev.firework.domain.config.PostgreSQLConfig
-import dev.firework.domain.skunkTypes.{Pool, SessionPool}
+
 import fs2.io.net.Network
+
 import natchez.Trace
+
 import org.typelevel.log4cats.Logger
+
 import skunk.*
 import skunk.codec.text.*
 import skunk.implicits.*
+
+import dev.firework.domain.config.PostgreSQLConfig
+import dev.firework.domain.skunkTypes.{Pool, SessionPool}
 
 trait MkPostgresSession[F[_]]:
 
@@ -40,7 +45,7 @@ object MkPostgresSession:
             database = "silicon_emporium_db",
             user = config.user,
             password = config.password.value.some,
-            max = 10,
-
+            max = 1,
+            ssl = SSL.System
           ).evalTap(checkPostgresConnection)
 

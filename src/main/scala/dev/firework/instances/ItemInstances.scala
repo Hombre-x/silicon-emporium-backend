@@ -11,7 +11,7 @@ object ItemInstances:
   given ItemEncoder: Encoder[Item] = deriveEncoder
   given ItemDecoder: Decoder[Item] = deriveDecoder
   
-  // Dedicated 
+  // Dedicated
   given BBItemEncoder: Encoder[BestBuyItem] = deriveEncoder
   given BBItemDecoder: Decoder[BestBuyItem] = deriveDecoder
   

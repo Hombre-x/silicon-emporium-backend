@@ -26,9 +26,9 @@ object Main extends IOApp:
   
   override def run(args: List[String]): IO[ExitCode] =
     
-    logger.info("Loading configurations...") >> Config.load[IO].flatMap( cfg =>
+    logger.info("Starting server...") >> Config.load[IO].flatMap( cfg =>
       
-      logger.info("Starting server...") >> AppResources.make[IO](cfg).use { resources =>
+      logger.info(s"Loading configurations: $cfg") >> AppResources.make[IO](cfg).use { resources =>
 
         val clients = AppClients.make(resources.client)
         val program = AppPrograms.make(clients)

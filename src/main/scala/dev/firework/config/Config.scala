@@ -3,7 +3,7 @@ package dev.firework.config
 import cats.syntax.parallel.*
 import cats.effect.Async
 
-import ciris.{ConfigValue, env}
+import ciris.{ConfigValue, env, file}
 
 import dev.firework.domain.config.*
 
@@ -15,7 +15,7 @@ object Config:
       env("SE_DATABASE_USERNAME").default("postgres").as[String],
       env("SE_DATABASE_PASSWORD").default("postgres").as[String].secret,
       env("SE_DATABASE_PORT").default("5432").as[Int],
-      env("SE_API_HTTP_PORT").default("8000").as[String]
+      env("SE_API_HTTP_PORT").default("10000").as[String]
     ).parMapN(
       
       (dbUrl, dbUser, dbPassword, dbPort, httpPort) =>
@@ -39,6 +39,7 @@ object Config:
             
         )
     )
+    
     
   def load[F[_] : Async]: F[AppConfig] = default[F].load[F]
   
