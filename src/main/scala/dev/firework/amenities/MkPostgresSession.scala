@@ -46,6 +46,6 @@ object MkPostgresSession:
             user = config.user,
             password = config.password.value.some,
             max = 1,
-            ssl = SSL.System
+            ssl = SSL.Trusted
           ).evalTap(checkPostgresConnection)
 
