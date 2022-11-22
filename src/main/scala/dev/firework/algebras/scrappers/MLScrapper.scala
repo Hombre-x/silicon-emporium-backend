@@ -52,7 +52,7 @@ object MLScrapper:
           finalItem <-
             (
               getTitle(item).pure[F],
-              (formatPrice(getPrice(item)) * 4948).pure[F],
+              formatPrice(getPrice(item)).pure[F],
               getSource(item).pure[F]
             ).parMapN(Item.apply)
         yield finalItem

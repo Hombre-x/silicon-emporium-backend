@@ -58,7 +58,7 @@ object BestBuyClient:
       
       val bestBuyItem = cursor.downField("products").downArray.as[BestBuyItem]
       
-      bestBuyItem.map(item => Item(item.name, item.salePrice, item.url))
+      bestBuyItem.map(item => Item(item.name, item.salePrice * 4948, item.url))
       
     end formatResponse
     
