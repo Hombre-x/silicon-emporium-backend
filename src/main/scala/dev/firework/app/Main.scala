@@ -34,7 +34,7 @@ object Main extends IOApp:
         val program = AppPrograms.make(clients)
         val security = AppSecurity.make(resources.postgres)
         val api = HttpApi.make(program, security)
-        val server = MkHttpServer.make[IO].create(api.httpApp)
+        val server = MkHttpServer.make[IO](cfg.httpServer).create(api.httpApp)
 
         server
           .useForever
