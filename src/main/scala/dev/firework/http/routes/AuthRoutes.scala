@@ -36,7 +36,7 @@ case class AuthRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](aut
         req.as[CreateUser].flatMap( user => 
           auth
             .register(user)
-            .flatMap(Created(_))
+            .flatMap(Logger[F].debug("Imminent register incoming") >> Created(_))
             .recoverWith {
               case UserInUse(_) => Conflict(s"${user.username}")
             }
@@ -46,9 +46,10 @@ case class AuthRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](aut
         req.as[LoginUser].flatMap { user =>
           auth
             .login(user.username, user.password)
-            .flatMap(Ok(_))
+            .flatMap(Logger[F].debug("Imminent login request") >> Ok(_))
             .recoverWith {
-              case UserNotFound(_) | InvalidPassword(_) => Forbidden()
+              case UserNotFound(_) | InvalidPassword(_) =>
+                Logger[F].debug("User not found or wrong password...") >> Forbidden()
             }
         
         }

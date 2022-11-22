@@ -23,7 +23,7 @@ object MkHttpServer:
       EmberServerBuilder
         .default[F]
         .withHost(ipv4"0.0.0.0")
-        .withPort(port"8000")
+        .withPort(port"80")
         .withHttpApp(app)
         .build
   
