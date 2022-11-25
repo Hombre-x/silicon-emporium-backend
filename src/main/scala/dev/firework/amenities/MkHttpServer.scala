@@ -25,8 +25,8 @@ object MkHttpServer:
     override def create(app: HttpApp[F]): Resource[F, Server] =
       EmberServerBuilder
         .default[F]
-        .withHost(ipv4"0.0.0.0")
-        .withPort(port"8000")
+        .withHost(config.host)
+        .withPort(config.port)
         .withHttpApp(app)
         .build
   

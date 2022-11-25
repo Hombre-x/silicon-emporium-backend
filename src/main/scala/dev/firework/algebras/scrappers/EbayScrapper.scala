@@ -3,13 +3,15 @@ package dev.firework.algebras.scrappers
 import cats.effect.{Async, Sync}
 import cats.{NonEmptyParallel, Parallel}
 import cats.syntax.all.*
-import fs2.{Chunk, Stream}
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import dev.firework.domain.search.*
 import org.jsoup.select.Elements
+
+import dev.firework.domain.search.*
 import dev.firework.domain.scrapper.*
-import dev.firework.utils.debug
+
+
 trait EbayScrapper[F[_]] extends Scrapper[F]
 
 object EbayScrapper:

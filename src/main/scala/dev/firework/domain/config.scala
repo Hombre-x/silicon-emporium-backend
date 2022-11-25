@@ -1,6 +1,8 @@
 package dev.firework.domain
 
 import ciris.Secret
+
+import com.comcast.ip4s.{Port,Host}
 object config:
   
   case class AppConfig(
@@ -17,8 +19,8 @@ object config:
   )
   
   case class HttpServerConfig(
-      host: String,
-      port: String
+      host: Host,
+      port: Port
   )
  
 end config

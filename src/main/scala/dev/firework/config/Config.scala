@@ -5,6 +5,8 @@ import cats.effect.Async
 
 import ciris.{ConfigValue, env, file}
 
+import com.comcast.ip4s.*
+
 import dev.firework.domain.config.*
 
 object Config:
@@ -15,7 +17,7 @@ object Config:
       env("SE_DATABASE_USERNAME").default("postgres").as[String],
       env("SE_DATABASE_PASSWORD").default("postgres").as[String].secret,
       env("SE_DATABASE_PORT").default("5432").as[Int],
-      env("SE_API_HTTP_PORT").default("10000").as[String]
+      env("SE_API_HTTP_PORT").default("80").as[Int]
     ).parMapN(
       
       (dbUrl, dbUser, dbPassword, dbPort, httpPort) =>
@@ -33,8 +35,8 @@ object Config:
 
           httpServer =
             HttpServerConfig(
-              host = "localhost",
-              port = httpPort
+              host = ipv4"0.0.0.0",
+              port = Port.fromInt(httpPort).getOrElse(port"80")
             )
             
         )
