@@ -64,6 +64,8 @@ object Auth:
             Sha256.hashString(changePassUser.password)
           )
       }
+      
+      
     
       
   end make

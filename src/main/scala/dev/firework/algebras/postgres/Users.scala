@@ -49,17 +49,16 @@ object Users:
       postgres.use( se =>
         se.prepare(changeUser).use(cmd =>
           cmd
-            .execute(username ~ password)
+            .execute(password ~ username)
             .as(username)
             .recoverWith{
               case e => e.raiseError[F, Username]
             }
         )
       )
-      
-      
+
   private object UsersSQL:
-    
+
     val encoder: Encoder[CreateUser] =
       (username ~ password ~ name ~ surname)
         .values
@@ -83,13 +82,12 @@ object Users:
          """.command.gcontramap[CreateUser]
       
       
-    val changeUser: Command[Username ~ Password] =
+    val changeUser: Command[Password ~ Username] =
       sql"""
            update "user"
            set "password" = $password
            where username = $username
          """.command
-    
     
   end UsersSQL
   
