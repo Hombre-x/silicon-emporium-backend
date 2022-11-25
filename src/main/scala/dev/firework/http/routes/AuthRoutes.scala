@@ -27,6 +27,8 @@ case class AuthRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](aut
   private given CreateUserEntityDecoder: EntityDecoder[F, CreateUser] = jsonOf[F, CreateUser]
 
   private given LoginUserEntityDecoder: EntityDecoder[F, LoginUser] = jsonOf[F, LoginUser]
+  
+  private given ChangePassEntityDecoder: EntityDecoder[F, ChangePassUser] = jsonOf[F, ChangePassUser]
 
   private def httpRoutes: HttpRoutes[F] =
 
@@ -51,8 +53,18 @@ case class AuthRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](aut
               case UserNotFound(_) | InvalidPassword(_) =>
                 Logger[F].debug("User not found or wrong password...") >> Forbidden()
             }
-        
         }
+
+      case req @ PUT -> Root / "reset" =>
+        req.as[ChangePassUser].flatMap( user =>
+          auth
+            .changePass(user)
+            .flatMap(Logger[F].info(s"Changed password for ${user.username}") >> Accepted(_))
+            .recoverWith{
+              case UserNotFound(_) => Forbidden("Can't change password.")
+            }
+        )
+        
     }
 
   val routes: HttpRoutes[F] = Router(prefixPath -> httpRoutes)

@@ -17,6 +17,8 @@ object user:
   
   case class LoginUser(username: Username, password: Password)
   
+  case class ChangePassUser(username: Username, password: Password)
+  
   case class UserInUse(username: Username) extends  NoStackTrace
   case class UserNotFound(username: Username) extends NoStackTrace
   case class InvalidPassword(username: Username) extends NoStackTrace

@@ -15,6 +15,7 @@ trait Auth[F[_]]:
 
   def register(user: CreateUser): F[Username]
   def login(username: Username, password: Password): F[Unit]
+  def changePass(changePassUser: ChangePassUser): F[Username]
 
 end Auth
 
@@ -52,6 +53,17 @@ object Auth:
           case Some(user) => Logger[F].info(s"User: ${user.username} logged in.")
           
       )
+
+    // TODO: Implement a better way to change user password, this is really insecure.
+    override def changePass(changePassUser: ChangePassUser): F[Username] =
+      users.find(changePassUser.username).flatMap{
+        case None => UserNotFound(changePassUser.username).raiseError[F, Username]
+        case Some(user) =>
+          users.changePassword(
+            user.username,
+            Sha256.hashString(changePassUser.password)
+          )
+      }
     
       
   end make

@@ -3,11 +3,9 @@ package dev.firework.algebras.postgres
 import cats.syntax.all.*
 import cats.effect.kernel.MonadCancelThrow
 import org.typelevel.log4cats.Logger
-
 import skunk.*
 import skunk.syntax.*
 import skunk.implicits.*
-
 import dev.firework.sql.SkunkCodecs.*
 import dev.firework.domain.user.*
 import dev.firework.domain.skunkTypes.Pool
@@ -17,6 +15,7 @@ trait Users[F[_]]:
 
   def find(username: String): F[Option[UserFound]]
   def create(user: CreateUser): F[Username]
+  def changePassword(username: Username, newPassword: Password): F[Username]
 
 end Users
 
@@ -25,7 +24,7 @@ object Users:
   
   def make[F[_] : MonadCancelThrow : Logger](postgres: Pool[F]): Users[F] = new Users[F]:
     
-    import UsersSQL.{createUser, selectUser}
+    import UsersSQL.{createUser, selectUser, changeUser}
 
     override def find(username: Username): F[Option[UserFound]] =
       postgres.use(se =>
@@ -41,6 +40,18 @@ object Users:
             .execute(user)
             .as(user.username)
             .recoverWith {
+              case e => e.raiseError[F, Username]
+            }
+        )
+      )
+
+    override def changePassword(username: Username, password: Password): F[Username] =
+      postgres.use( se =>
+        se.prepare(changeUser).use(cmd =>
+          cmd
+            .execute(username ~ password)
+            .as(username)
+            .recoverWith{
               case e => e.raiseError[F, Username]
             }
         )
@@ -71,7 +82,14 @@ object Users:
            values ($username, $password, $name, $surname);
          """.command.gcontramap[CreateUser]
       
-    end createUser
+      
+    val changeUser: Command[Username ~ Password] =
+      sql"""
+           update "user"
+           set "password" = $password
+           where username = $username
+         """.command
+    
     
   end UsersSQL
   
