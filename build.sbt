@@ -1,4 +1,4 @@
-ThisBuild / version := "0.1.8"
+ThisBuild / version := "0.1.9"
 
 ThisBuild / scalaVersion := "3.2.0"
 
@@ -14,12 +14,12 @@ lazy val root = (project in file("."))
 
       // Cats
       "org.typelevel" %% "cats-core" % "2.9.0",
-      "org.typelevel" %% "cats-effect" % "3.4.0",
+      "org.typelevel" %% "cats-effect" % "3.4.1",
       "org.typelevel" %% "log4cats-core" % "2.5.0",
       "org.typelevel" %% "log4cats-slf4j" % "2.5.0",
 
       // Fs2
-      "co.fs2" %% "fs2-core" % "3.3.0",
+      "co.fs2" %% "fs2-core" % "3.4.0",
 
       // Circe
       "io.circe" %% "circe-generic" % "0.14.3",
