@@ -49,7 +49,9 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
               resp <- Ok(separated._2.asJson)
             yield resp
 
-          case None => BadRequest("Can't perform an empty query")
+          case Some(query) if query.isEmpty =>
+            BadRequest("Can't perform an empty query")
+            
           case _    => BadRequest("Can't perform an empty query")
     }
 

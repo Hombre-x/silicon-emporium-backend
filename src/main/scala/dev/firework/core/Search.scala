@@ -19,7 +19,7 @@ case class Search[F[_] : Sync : Parallel](clients: AppClients[F]):
   
   private val scrappers: List[Scrapper[F]] =
     List(
-      AmazonScrapper.impl[F],
+      // AmazonScrapper.impl[F],
       EbayScrapper.impl[F],
       MLScrapper.impl[F],
       BestbuyScrapper.impl[F](clients.bestBuyClient)
