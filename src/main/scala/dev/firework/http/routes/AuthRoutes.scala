@@ -59,7 +59,10 @@ case class AuthRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](aut
         req.as[ChangePassUser].flatMap( user =>
           auth
             .changePass(user)
-            .flatMap(Logger[F].info(s"Changed password for ${user.username}") >> Accepted(_))
+            .flatMap( username =>
+              Logger[F].info(s"Changed password for ${user.username}") >>
+                Accepted(UserName(username).asJson)
+            )
             .recoverWith{
               case UserNotFound(_) => Forbidden("Can't change password.")
             }
