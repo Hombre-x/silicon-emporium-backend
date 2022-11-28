@@ -45,7 +45,7 @@ object MkPostgresSession:
             database = "silicon_emporium_db",
             user = config.user,
             password = config.password.value.some,
-            max = 1,
+            max = 10,
             ssl = SSL.Trusted
           ).evalTap(checkPostgresConnection)
 

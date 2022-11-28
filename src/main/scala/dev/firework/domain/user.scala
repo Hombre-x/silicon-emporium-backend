@@ -15,6 +15,8 @@ object user:
       surnames: String
   )
   
+  case class UserName(username: Username)
+  
   case class LoginUser(username: Username, password: Password)
   
   case class ChangePassUser(username: Username, password: Password)

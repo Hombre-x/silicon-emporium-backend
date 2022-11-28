@@ -38,7 +38,7 @@ case class AuthRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](aut
         req.as[CreateUser].flatMap( user => 
           auth
             .register(user)
-            .flatMap(Logger[F].debug("Imminent register incoming") >> Created(_))
+            .flatMap(username => Logger[F].debug("Imminent register incoming") >> Created(UserName(username).asJson))
             .recoverWith {
               case UserInUse(_) => Conflict(s"${user.username}")
             }
