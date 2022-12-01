@@ -69,7 +69,7 @@ object EbayScrapper:
             ).parTupled
           (title, price, source) = tup
           formattedPrice <- formatPrice(price).liftTo[F]
-        yield Item(title, formattedPrice * 4948, source)
+        yield Item(title, formattedPrice * 4948, source, "eBay")
         
       result.attempt
 

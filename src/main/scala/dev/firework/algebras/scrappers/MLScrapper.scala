@@ -53,7 +53,8 @@ object MLScrapper:
             (
               getTitle(item).pure[F],
               formatPrice(getPrice(item)).pure[F],
-              getSource(item).pure[F]
+              getSource(item).pure[F],
+              "Mercado Libre".pure[F]
             ).parMapN(Item.apply)
         yield finalItem
         

@@ -21,29 +21,27 @@ import dev.firework.domain.config.AppConfig
 import dev.firework.config.Config
 
 object Main extends IOApp:
-  
-  given logger: Logger[IO] = Slf4jLogger.getLoggerFromName("Main")
-  
-  override def run(args: List[String]): IO[ExitCode] =
-    
-    logger.info("Starting server...") >> Config.load[IO].flatMap( cfg =>
-      
-      logger.info(s"Loading configurations: $cfg") >> AppResources.make[IO](cfg).use { resources =>
 
-        val clients = AppClients.make(resources.client)
-        val program = AppPrograms.make(clients)
-        val security = AppSecurity.make(resources.postgres)
-        val api = HttpApi.make(program, security)
-        val server = MkHttpServer.make[IO](cfg.httpServer).create(api.httpApp)
+  override def run(args: List[String]): IO[ExitCode] = Config
+    .load[IO]
+    .flatMap(cfg =>
+      logger.info(s"Loading configurations: $cfg") >>
+        AppResources.make[IO](cfg).use { resources =>
 
-        server
-          .useForever
-          .onCancel(logger.info("Closing server..."))
-          .as(ExitCode.Success)
+          val clients  = AppClients.make(resources.client)
+          val program  = AppPrograms.make(clients)
+          val security = AppSecurity.make(resources.postgres)
+          val api      = HttpApi.make(program, security)
+          val server   = MkHttpServer.make[IO](cfg.httpServer).create(api.httpApp)
 
-      }
+          server.useForever
+            .onCancel(logger.info("Closing server..."))
+            .as(ExitCode.Success)
+
+        }
     )
-    
+
   end run
-  
+  given logger: Logger[IO] = Slf4jLogger.getLoggerFromName("Main")
+
 end Main
