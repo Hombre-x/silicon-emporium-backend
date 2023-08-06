@@ -1,6 +1,7 @@
 package dev.firework.amenities
 
 import cats.effect.{Async, Resource}
+import fs2.io.net.Network
 import org.http4s.client.Client
 import org.http4s.ember.client.EmberClientBuilder
 
@@ -13,7 +14,7 @@ end MkHttpClient
 
 object MkHttpClient:
   
-  def make[F[_] : Async]: MkHttpClient[F] = new MkHttpClient[F]:
+  def make[F[_] : Async : Network]: MkHttpClient[F] = new MkHttpClient[F]:
     override def create: Resource[F, Client[F]] =
       EmberClientBuilder
         .default[F]
