@@ -2,6 +2,10 @@ ThisBuild / version := "0.1.15"
 
 ThisBuild / scalaVersion := "3.3.0"
 
+ThisBuild / semanticdbEnabled := true
+
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+
 lazy val root = (project in file("."))
   .enablePlugins(JavaServerAppPackaging, DockerPlugin)
   .settings(

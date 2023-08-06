@@ -1,13 +1,13 @@
 package dev.firework.config
 
-import cats.syntax.parallel.*
 import cats.effect.Async
+import cats.syntax.parallel.*
 
-import ciris.{ConfigValue, env}
-
-import com.comcast.ip4s.*
+import ciris.{env, ConfigValue}
 
 import dev.firework.domain.config.*
+
+import com.comcast.ip4s.*
 
 object Config:
 

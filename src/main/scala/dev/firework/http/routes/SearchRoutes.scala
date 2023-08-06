@@ -1,21 +1,23 @@
 package dev.firework.http.routes
 
+import cats.Parallel
 import cats.effect.Sync
 import cats.syntax.all.*
-import cats.Parallel
 
 import org.typelevel.log4cats.Logger
 
 import io.circe.syntax.*
 
-import org.http4s.circe.*
-import org.http4s.dsl.*
 import org.http4s.dsl.impl.*
-import org.http4s.server.Router
+import org.http4s.dsl.*
 import org.http4s.HttpRoutes
+import org.http4s.server.Router
+import org.http4s.circe.*
+
 
 import dev.firework.core.Search
 import dev.firework.instances.ItemInstances.given
+
 
 case class SearchRoutes[F[_]: Sync : Parallel : Logger](
     search: Search[F]

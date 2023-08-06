@@ -1,17 +1,17 @@
 package dev.firework.app
 
-import cats.syntax.show.*
 import cats.effect.{ExitCode, IO, IOApp}
+import cats.syntax.show.*
 
 import org.typelevel.log4cats.Logger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
-import natchez.Trace.Implicits.noop
-
-import dev.firework.http.HttpApi
 import dev.firework.amenities.*
 import dev.firework.config.Config
+import dev.firework.http.HttpApi
 import dev.firework.instances.ConfigInstances.given
+
+import natchez.Trace.Implicits.noop
 
 object Main extends IOApp:
 

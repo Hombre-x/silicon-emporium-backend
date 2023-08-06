@@ -2,12 +2,16 @@ package dev.firework.amenities
 
 import cats.effect.Async
 import cats.effect.kernel.Resource
+
+import fs2.io.net.Network
+
+import org.typelevel.log4cats.Logger
+
 import org.http4s.HttpApp
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Server
-import org.typelevel.log4cats.Logger
+
 import dev.firework.domain.config.HttpServerConfig
-import fs2.io.net.Network
 
 trait MkHttpServer[F[_]]:
   

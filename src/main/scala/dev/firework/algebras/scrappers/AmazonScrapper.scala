@@ -3,10 +3,10 @@ package dev.firework.algebras.scrappers
 import cats.effect.Sync
 import cats.syntax.applicativeError.*
 
-import org.jsoup.Jsoup
-
 import dev.firework.domain.scrapper.*
 import dev.firework.domain.search.Item
+
+import org.jsoup.Jsoup
 
 trait AmazonScrapper[F[_]] extends Scrapper[F]
 

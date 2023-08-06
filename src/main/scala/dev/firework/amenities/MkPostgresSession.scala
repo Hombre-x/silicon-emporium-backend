@@ -1,13 +1,11 @@
 package dev.firework.amenities
 
-import cats.effect.std.Console
 import cats.effect.Temporal
+import cats.effect.std.Console
 import cats.syntax.flatMap.*
 import cats.syntax.option.*
 
 import fs2.io.net.Network
-
-import natchez.Trace
 
 import org.typelevel.log4cats.Logger
 
@@ -17,6 +15,8 @@ import skunk.implicits.*
 
 import dev.firework.domain.config.PostgreSQLConfig
 import dev.firework.domain.skunkTypes.{Pool, SessionPool}
+
+import natchez.Trace
 
 trait MkPostgresSession[F[_]]:
 

@@ -3,17 +3,15 @@ package dev.firework.http.client.algebras
 import cats.effect.Concurrent
 import cats.syntax.all.*
 
-import org.http4s.client.*
-import org.http4s.*
-import org.http4s.implicits.*
-import org.http4s.Uri
+import org.http4s.{Uri, _}
 import org.http4s.circe.CirceEntityDecoder.circeEntityDecoder
+import org.http4s.client.*
+import org.http4s.implicits.*
 
-import io.circe.Json
-import io.circe.HCursor
+import io.circe.{HCursor, Json}
 
 import dev.firework.domain.scrapper.{ScrapperResult, UserQuery}
-import dev.firework.domain.search.{Item, BestBuyItem}
+import dev.firework.domain.search.{BestBuyItem, Item}
 import dev.firework.instances.ItemInstances.given
 
 

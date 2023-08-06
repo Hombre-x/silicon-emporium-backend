@@ -1,16 +1,16 @@
 package dev.firework.algebras.postgres
 
-import cats.syntax.all.*
 import cats.effect.kernel.MonadCancelThrow
+import cats.syntax.all.*
 
 import org.typelevel.log4cats.Logger
 
 import skunk.*
 import skunk.syntax.all.*
 
-import dev.firework.sql.SkunkCodecs.*
-import dev.firework.domain.user.*
 import dev.firework.domain.skunkTypes.Pool
+import dev.firework.domain.user.*
+import dev.firework.sql.SkunkCodecs.*
 
 
 trait Users[F[_]]:
@@ -83,7 +83,7 @@ object Users:
       sql"""
            update "user"
            set "password" = $password
-           where username = $username
+           where username = $username;
          """.command
     
   end UsersSQL

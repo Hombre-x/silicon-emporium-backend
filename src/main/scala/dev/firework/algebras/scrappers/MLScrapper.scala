@@ -3,10 +3,12 @@ package dev.firework.algebras.scrappers
 import cats.Parallel
 import cats.effect.Sync
 import cats.syntax.all.*
-import org.jsoup.Jsoup
-import org.jsoup.nodes.{Document, Element}
+
 import dev.firework.domain.scrapper.*
 import dev.firework.domain.search.*
+
+import org.jsoup.Jsoup
+import org.jsoup.nodes.{Document, Element}
 
 trait MLScrapper[F[_]] extends Scrapper[F]
 

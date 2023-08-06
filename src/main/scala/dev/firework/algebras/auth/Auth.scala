@@ -2,12 +2,13 @@ package dev.firework.algebras.auth
 
 import cats.MonadThrow
 import cats.syntax.all.*
-import org.typelevel.log4cats.Logger
 
-import com.dedipresta.crypto.hash.sha256.Sha256
+import org.typelevel.log4cats.Logger
 
 import dev.firework.algebras.postgres.Users
 import dev.firework.domain.user.*
+
+import com.dedipresta.crypto.hash.sha256.Sha256
 
 
 trait Auth[F[_]]:

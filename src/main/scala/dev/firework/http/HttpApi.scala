@@ -1,10 +1,11 @@
 package dev.firework.http
 
 import cats.Parallel
-import cats.syntax.semigroupk.*
 import cats.effect.Async
+import cats.syntax.semigroupk.*
 
 import org.typelevel.log4cats.Logger
+
 import org.http4s.{HttpApp, HttpRoutes}
 import org.http4s.server.middleware.CORS
 

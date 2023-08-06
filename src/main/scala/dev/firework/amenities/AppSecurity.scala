@@ -1,10 +1,11 @@
 package dev.firework.amenities
 
 import cats.effect.MonadCancelThrow
+
 import org.typelevel.log4cats.Logger
 
-import dev.firework.algebras.postgres.Users
 import dev.firework.algebras.auth.Auth
+import dev.firework.algebras.postgres.Users
 import dev.firework.domain.skunkTypes.Pool
 
 

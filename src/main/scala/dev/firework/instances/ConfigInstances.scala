@@ -1,6 +1,7 @@
 package dev.firework.instances
 
 import cats.Show
+
 import dev.firework.domain.config.AppConfig
 
 object ConfigInstances:

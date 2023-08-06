@@ -2,6 +2,7 @@ package dev.firework.instances
 
 import io.circe.*
 import io.circe.generic.semiauto.*
+
 import dev.firework.domain.user.{ChangePassUser, CreateUser, LoginUser, UserName}
 
 

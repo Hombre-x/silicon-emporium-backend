@@ -1,9 +1,10 @@
 package dev.firework.instances
 
+import io.circe.Decoder.Result
 import io.circe.*
 import io.circe.generic.semiauto.*
+
 import dev.firework.domain.search.*
-import io.circe.Decoder.Result
 
 object ItemInstances:
   

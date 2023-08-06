@@ -1,14 +1,13 @@
 package dev.firework.http.routes
 
 import cats.MonadThrow
-import cats.syntax.all.*
 import cats.effect.Concurrent
+import cats.syntax.all.*
 
 import org.typelevel.log4cats.Logger
 
 import org.http4s.{EntityDecoder, HttpRoutes}
-import org.http4s.circe.{JsonDecoder, jsonOf}
-import org.http4s.circe.*
+import org.http4s.circe.{jsonOf, JsonDecoder, _}
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
 

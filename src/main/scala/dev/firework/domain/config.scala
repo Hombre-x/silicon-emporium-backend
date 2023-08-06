@@ -2,7 +2,7 @@ package dev.firework.domain
 
 import ciris.Secret
 
-import com.comcast.ip4s.{Port,Host}
+import com.comcast.ip4s.{Host, Port}
 object config:
   
   case class AppConfig(
