@@ -1,9 +1,5 @@
 package http.client.algebras
 
-import io.circe.{Json, HCursor}
-import io.circe.syntax.*
-import dev.firework.domain.search.Item
-import dev.firework.instances.ItemInstances.{ItemDecoder, ItemEncoder}
 import org.scalatest.funsuite.*
 import org.scalatest.matchers.should.*
 

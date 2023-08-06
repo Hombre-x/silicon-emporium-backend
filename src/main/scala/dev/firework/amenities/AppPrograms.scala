@@ -2,9 +2,8 @@ package dev.firework.amenities
 
 import cats.Parallel
 import cats.effect.Sync
+
 import dev.firework.core.Search
-import dev.firework.amenities.AppClients
-import org.http4s.client.Client
 
 abstract class AppPrograms[F[_] : Sync : Parallel](private val clients: AppClients[F]):
 

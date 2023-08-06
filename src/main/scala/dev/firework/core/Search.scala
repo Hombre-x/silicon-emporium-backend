@@ -4,13 +4,10 @@ import cats.Parallel
 import cats.effect.Sync
 import cats.syntax.all.*
 
-import org.http4s.client.Client
-
 import dev.firework.algebras.scrappers.*
 import dev.firework.amenities.AppClients
 import dev.firework.domain.scrapper.*
 import dev.firework.domain.search.*
-import dev.firework.utils.debug
 
 case class Search[F[_] : Sync : Parallel](clients: AppClients[F]):
   

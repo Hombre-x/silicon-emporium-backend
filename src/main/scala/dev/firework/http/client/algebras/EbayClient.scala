@@ -1,6 +1,5 @@
 package dev.firework.http.client.algebras
 
-import cats.effect.Concurrent
 import dev.firework.domain.scrapper.{ScrapperResult, UserQuery}
 
 trait EbayClient[F[_]]:

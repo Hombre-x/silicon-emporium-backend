@@ -1,6 +1,5 @@
 package dev.firework.amenities
 
-import cats.Parallel
 import cats.syntax.parallel.*
 import cats.effect.{Async, Resource}
 import cats.effect.std.Console
@@ -13,7 +12,6 @@ import fs2.io.net.Network
 
 import natchez.Trace
 
-import dev.firework.amenities.MkHttpClient
 import dev.firework.domain.config.*
 import dev.firework.domain.skunkTypes.Pool
 

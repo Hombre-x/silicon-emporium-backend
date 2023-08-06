@@ -1,8 +1,6 @@
 package dev.firework.algebras.scrappers
 
-import cats.effect.Sync
 import dev.firework.domain.scrapper.*
-import dev.firework.domain.search.*
 import dev.firework.http.client.algebras.BestBuyClient
 
 trait BestbuyScrapper[F[_]] extends Scrapper[F]

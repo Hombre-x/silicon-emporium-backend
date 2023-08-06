@@ -11,8 +11,6 @@ import org.http4s.circe.CirceEntityDecoder.circeEntityDecoder
 
 import io.circe.Json
 import io.circe.HCursor
-import io.circe.syntax.EncoderOps
-import io.circe.generic.auto.*
 
 import dev.firework.domain.scrapper.{ScrapperResult, UserQuery}
 import dev.firework.domain.search.{Item, BestBuyItem}

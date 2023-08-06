@@ -2,9 +2,12 @@ package dev.firework.algebras.postgres
 
 import cats.syntax.all.*
 import cats.effect.kernel.MonadCancelThrow
+
 import org.typelevel.log4cats.Logger
+
 import skunk.*
 import skunk.syntax.all.*
+
 import dev.firework.sql.SkunkCodecs.*
 import dev.firework.domain.user.*
 import dev.firework.domain.skunkTypes.Pool

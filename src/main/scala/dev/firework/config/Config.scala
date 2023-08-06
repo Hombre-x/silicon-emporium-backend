@@ -3,7 +3,7 @@ package dev.firework.config
 import cats.syntax.parallel.*
 import cats.effect.Async
 
-import ciris.{ConfigValue, env, file}
+import ciris.{ConfigValue, env}
 
 import com.comcast.ip4s.*
 

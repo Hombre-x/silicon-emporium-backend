@@ -14,7 +14,6 @@ import org.http4s.server.Router
 
 import io.circe.syntax.*
 
-import dev.firework.algebras.postgres.Users
 import dev.firework.algebras.auth.Auth
 import dev.firework.domain.user.*
 import dev.firework.instances.UserInstances.given

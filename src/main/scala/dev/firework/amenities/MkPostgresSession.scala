@@ -1,15 +1,20 @@
 package dev.firework.amenities
 
 import cats.effect.std.Console
-import cats.effect.{Concurrent, Resource, Temporal}
+import cats.effect.Temporal
 import cats.syntax.flatMap.*
 import cats.syntax.option.*
+
 import fs2.io.net.Network
+
 import natchez.Trace
+
 import org.typelevel.log4cats.Logger
+
 import skunk.*
 import skunk.codec.text.*
 import skunk.implicits.*
+
 import dev.firework.domain.config.PostgreSQLConfig
 import dev.firework.domain.skunkTypes.{Pool, SessionPool}
 

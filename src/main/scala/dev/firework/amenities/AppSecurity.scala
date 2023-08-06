@@ -5,7 +5,6 @@ import org.typelevel.log4cats.Logger
 
 import dev.firework.algebras.postgres.Users
 import dev.firework.algebras.auth.Auth
-import dev.firework.domain.config.AppConfig
 import dev.firework.domain.skunkTypes.Pool
 
 
@@ -18,5 +17,5 @@ end AppSecurity
 
 
 object AppSecurity:
-  def make[F[_] : MonadCancelThrow : Logger](postgres: Pool[F]): AppSecurity[F] = 
+  def make[F[_] : MonadCancelThrow : Logger](postgres: Pool[F]): AppSecurity[F] =
     new AppSecurity[F](postgres) {}

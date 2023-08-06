@@ -50,6 +50,7 @@ lazy val root = (project in file("."))
     ),
     
     scalacOptions ++= Seq(
-      "-Wunused:all"
+      "-Wunused:all",
+      "-deprecation"
     )
   )

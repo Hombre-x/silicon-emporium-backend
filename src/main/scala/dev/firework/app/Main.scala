@@ -3,17 +3,13 @@ package dev.firework.app
 import cats.syntax.show.*
 import cats.effect.{ExitCode, IO, IOApp}
 
-import com.comcast.ip4s.*
-
-import org.http4s.HttpApp
-import org.http4s.implicits.*
-import org.http4s.ember.server.EmberServerBuilder
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 import natchez.Trace.Implicits.noop
 
 import dev.firework.http.HttpApi
 import dev.firework.amenities.*
-import dev.firework.domain.config.AppConfig
 import dev.firework.config.Config
 import dev.firework.instances.ConfigInstances.given
 
@@ -36,6 +32,7 @@ object Main extends IOApp:
             .as(ExitCode.Success)
 
   end run
-  given logger: Logger[IO] = Slf4jLogger.getLoggerFromName("Main")
+  
+  given logger: Logger[IO] = Slf4jLogger.getLoggerFromName("🌎App")
 
 end Main

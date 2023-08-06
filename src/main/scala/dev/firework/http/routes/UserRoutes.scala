@@ -1,6 +1,5 @@
 package dev.firework.http.routes
 
-import cats.Monad
 import cats.MonadThrow
 import cats.syntax.all.*
 import cats.effect.Concurrent
@@ -9,14 +8,13 @@ import org.typelevel.log4cats.Logger
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
 import org.http4s.circe.*
-import org.http4s.circe.CirceEntityDecoder.circeEntityDecoder
 import org.http4s.server.Router
 import org.http4s.EntityDecoder
 
 import io.circe.syntax.*
 
 import dev.firework.algebras.postgres.Users
-import dev.firework.domain.user.{CreateUser, LoginUser}
+import dev.firework.domain.user.CreateUser
 import dev.firework.instances.UserInstances.given
 
 
@@ -28,17 +26,15 @@ case class UserRoutes[F[_] : MonadThrow : JsonDecoder : Concurrent : Logger](use
   
   private def httpRoutes: HttpRoutes[F] =
 
-    HttpRoutes.of[F] {
+    HttpRoutes.of[F]:
       case req @ POST -> Root / "create" =>
         req.as[CreateUser].flatMap(
           user =>
-            users.find(user.username).flatMap {
+            users.find(user.username).flatMap:
               case Some(userFound) => Conflict(userFound.username.asJson)
               case None => users.create(user) >> Created(user.username.asJson)
-              case _ => BadRequest("Empty username")
-            }
           )
-    }
+    
     
   val routes: HttpRoutes[F] = Router(prefixPath -> httpRoutes)
   

@@ -2,7 +2,7 @@ package dev.firework.http
 
 import cats.Parallel
 import cats.syntax.semigroupk.*
-import cats.effect.{Async, Sync}
+import cats.effect.Async
 
 import org.typelevel.log4cats.Logger
 import org.http4s.{HttpApp, HttpRoutes}

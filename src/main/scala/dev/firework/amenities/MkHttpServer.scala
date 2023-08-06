@@ -2,11 +2,9 @@ package dev.firework.amenities
 
 import cats.effect.Async
 import cats.effect.kernel.Resource
-import com.comcast.ip4s.*
 import org.http4s.HttpApp
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Server
-import dev.firework.domain.config.HttpServerConfig
 import org.typelevel.log4cats.Logger
 
 trait MkHttpServer[F[_]]:
