@@ -26,35 +26,30 @@ object Users:
     import UsersSQL.{createUser, selectUser, changeUser}
 
     override def find(username: Username): F[Option[UserFound]] =
-      postgres.use(se =>
-        se.prepare(selectUser).use( ps =>
+      postgres.use: se =>
+        se.prepare(selectUser).flatMap( ps =>
             ps.option(username)
           )
-        )
     
     override def create(user: CreateUser): F[Username] =
-      postgres.use(se =>
-        se.prepare(createUser).use(cmd =>
+      postgres.use: se =>
+        se.prepare(createUser).flatMap( cmd =>
           cmd
             .execute(user)
             .as(user.username)
-            .recoverWith {
+            .recoverWith:
               case e => e.raiseError[F, Username]
-            }
         )
-      )
 
     override def changePassword(username: Username, password: Password): F[Username] =
-      postgres.use( se =>
-        se.prepare(changeUser).use(cmd =>
+      postgres.use: se =>
+        se.prepare(changeUser).flatMap( cmd =>
           cmd
             .execute(password ~ username)
             .as(username)
-            .recoverWith{
+            .recoverWith:
               case e => e.raiseError[F, Username]
-            }
         )
-      )
 
   private object UsersSQL:
 

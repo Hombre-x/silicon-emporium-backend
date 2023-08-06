@@ -6,9 +6,6 @@ import cats.{Monad, Parallel}
 
 import org.typelevel.log4cats.Logger
 
-import eu.timepit.refined.types.string.NonEmptyString
-import eu.timepit.refined.auto._
-
 import io.circe.syntax.*
 
 import org.http4s.circe.*

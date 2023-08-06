@@ -14,11 +14,6 @@ import io.circe.HCursor
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto.*
 
-import eu.timepit.refined.auto._
-import eu.timepit.refined.string._
-import eu.timepit.refined.types.string.NonEmptyString
-
-
 import dev.firework.domain.scrapper.{ScrapperResult, UserQuery}
 import dev.firework.domain.search.{Item, BestBuyItem}
 import dev.firework.instances.ItemInstances.given
@@ -65,8 +60,7 @@ object BestBuyClient:
 
     override def getItem(userQuery: UserQuery): F[ScrapperResult] =
       for
-        response: Either[Throwable, Json] <-
-          client.expect[Json](queryUri(userQuery)).attempt
+        response <- client.expect[Json](queryUri(userQuery)).attempt
         maybeItem = response.flatMap(jsonItem => formatResponse(jsonItem))
       yield maybeItem
       

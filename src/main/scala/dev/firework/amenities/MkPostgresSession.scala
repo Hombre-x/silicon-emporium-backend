@@ -1,20 +1,15 @@
 package dev.firework.amenities
 
 import cats.effect.std.Console
-import cats.effect.{Concurrent, Resource}
+import cats.effect.{Concurrent, Resource, Temporal}
 import cats.syntax.flatMap.*
 import cats.syntax.option.*
-
 import fs2.io.net.Network
-
 import natchez.Trace
-
 import org.typelevel.log4cats.Logger
-
 import skunk.*
 import skunk.codec.text.*
 import skunk.implicits.*
-
 import dev.firework.domain.config.PostgreSQLConfig
 import dev.firework.domain.skunkTypes.{Pool, SessionPool}
 
@@ -24,7 +19,7 @@ trait MkPostgresSession[F[_]]:
 
 object MkPostgresSession:
 
-  def make[F[_]: Concurrent: Trace: Console: Network: Logger](
+  def make[F[_] : Temporal : Trace : Console : Network : Logger](
       config: PostgreSQLConfig
   ): MkPostgresSession[F] =
     

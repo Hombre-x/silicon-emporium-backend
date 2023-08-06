@@ -4,7 +4,6 @@ import cats.Parallel
 import cats.effect.Sync
 import cats.syntax.all.*
 
-import eu.timepit.refined.types.string.NonEmptyString
 import org.http4s.client.Client
 
 import dev.firework.algebras.scrappers.*

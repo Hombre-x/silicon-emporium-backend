@@ -47,7 +47,7 @@ object MLScrapper:
       
       val result: F[Item] =
         for
-          doc: Document <- connectionDoc
+          doc <- connectionDoc
           item = getFirstItem(doc)
           finalItem <-
             (
