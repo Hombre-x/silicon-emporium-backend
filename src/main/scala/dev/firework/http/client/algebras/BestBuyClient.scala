@@ -8,16 +8,16 @@ import org.http4s.circe.CirceEntityDecoder.circeEntityDecoder
 import org.http4s.client.*
 import org.http4s.implicits.*
 
-import io.circe.{HCursor, Json}
+import io.circe.{HCursor, Json, Decoder}
 
-import dev.firework.domain.scrapper.{ScrapperResult, UserQuery}
+import dev.firework.domain.scrapper.UserQuery
 import dev.firework.domain.search.{BestBuyItem, Item}
 import dev.firework.instances.ItemInstances.given
 
 
 trait BestBuyClient[F[_]]:
   
-  def getItem(userQuery: UserQuery): F[ScrapperResult]
+  def getItem(userQuery: UserQuery): F[Item]
   
 end BestBuyClient
 
@@ -43,7 +43,7 @@ object BestBuyClient:
         .getOrElse(uri"/")
       
       
-    private def formatResponse(response: Json): Either[Throwable, Item] =
+    private def formatResponse(response: Json): Decoder.Result[Item] =
       
       val cursor: HCursor = response.hcursor
       
@@ -54,11 +54,11 @@ object BestBuyClient:
     end formatResponse
     
 
-    override def getItem(userQuery: UserQuery): F[ScrapperResult] =
+    override def getItem(userQuery: UserQuery): F[Item] =
       for
-        response <- client.expect[Json](queryUri(userQuery)).attempt
-        maybeItem = response.flatMap(jsonItem => formatResponse(jsonItem))
-      yield maybeItem
+        response <- client.expect[Json](queryUri(userQuery))
+        item     <- Concurrent[F].fromEither(formatResponse(response))
+      yield item
       
   
 end BestBuyClient

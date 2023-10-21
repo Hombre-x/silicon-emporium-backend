@@ -19,16 +19,14 @@ object MLScrapper:
     def formatPrice(price: String): Currency =
       price.filter(_.isDigit).toFloat
       
-    override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
+    override def getMatchedElement(userQuery: UserQuery): F[Item] =
       
-      val url = raw"https://listado.mercadolibre.com.co/$userQuery"
+      val url = s"""https://listado.mercadolibre.com.co/$userQuery"""
       val titleClassName = "ui-search-item__title shops__item-title"
       val priceClassName = "price-tag-text-sr-only"
       
-      val connectionDoc =
-        Sync[F].delay(
-          Jsoup.connect(url).get()
-        )
+      val connectionDoc = Sync[F].delay:
+        Jsoup.connect(url).get()
         
         
       def getFirstItem(doc: Document): Element =
@@ -45,8 +43,9 @@ object MLScrapper:
         
       def getSource(item: Element): String =
         item.getElementsByClass("ui-search-link").first.attr("href")
-        
-      
+
+
+      // Getting the final result
       val result: F[Item] =
         for
           doc <- connectionDoc
@@ -60,7 +59,7 @@ object MLScrapper:
             ).parMapN(Item.apply)
         yield finalItem
         
-      result.attempt
+      result
       
     end getMatchedElement 
     

@@ -7,6 +7,5 @@ trait BestbuyScrapper[F[_]] extends Scrapper[F]
 
 object BestbuyScrapper:
   
-  def impl[F[_]](bestBuyClient: BestBuyClient[F]): Scrapper[F] = new Scrapper[F]:
-    override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
-      bestBuyClient.getItem(userQuery)
+  def impl[F[_]](bestBuyClient: BestBuyClient[F]): Scrapper[F] =
+   (userQuery: UserQuery) => bestBuyClient.getItem(userQuery)

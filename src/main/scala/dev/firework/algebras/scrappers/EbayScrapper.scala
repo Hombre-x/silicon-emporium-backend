@@ -22,7 +22,7 @@ object EbayScrapper:
         price.filter(ch => ch.isDigit || ch == '.').toFloat
     
     
-    override def getMatchedElement(userQuery: UserQuery): F[ScrapperResult] =
+    override def getMatchedElement(userQuery: UserQuery): F[Item] =
       
       val url = raw"https://www.ebay.com/sch/i.html?_nkw=$userQuery"
 
@@ -56,7 +56,7 @@ object EbayScrapper:
           .select("a").first
           .attr("href")
       
-
+      // Getting the final result
       val result: F[Item] =
         for
           doc <- connectionDoc
@@ -70,7 +70,10 @@ object EbayScrapper:
           (title, price, source) = tup
           formattedPrice <- formatPrice(price)
         yield Item(title, formattedPrice * 4948, source, "eBay")
+      
+      result
+      
+    end getMatchedElement
         
-      result.attempt
 
 end EbayScrapper

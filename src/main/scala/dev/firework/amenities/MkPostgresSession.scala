@@ -2,8 +2,7 @@ package dev.firework.amenities
 
 import cats.effect.Temporal
 import cats.effect.std.Console
-import cats.syntax.flatMap.*
-import cats.syntax.option.*
+import cats.syntax.all.*
 
 import fs2.io.net.Network
 
@@ -42,10 +41,10 @@ object MkPostgresSession:
           .pooled(
             host = config.host,
             port = config.port,
-            database = "silicon_emporium_db",
+            database = "silicon_emporium_db_test",
             user = config.user,
             password = config.password.value.some,
             max = 10,
-            ssl = SSL.Trusted
+            ssl = SSL.None
           ).evalTap(checkPostgresConnection)
 

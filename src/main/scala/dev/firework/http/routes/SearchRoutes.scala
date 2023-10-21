@@ -30,25 +30,23 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
 
   private def httpRoutes: HttpRoutes[F] =
 
-    HttpRoutes.of[F] {
+    HttpRoutes.of[F]:
 
       // GET -> search/query?keywords=Nvidia GeForce 3090 TI
       case GET -> Root / "query" :? OptionalSearchQueryParamMatcher(maybeQuery) =>
         
         maybeQuery match
           case Some(query) if query.nonEmpty =>
-            for
-              results <- search.perform(query)
-              separated = search.separateErrors(results)
-              _        <- Logger[F].info(s"${separated._1}")
-              resp <- Ok(separated._2.asJson)
-            yield resp
+            search.perform(query)
+              .compile
+              .toList
+              .flatMap(items => Ok(items.asJson))
 
           case Some(query) if query.isEmpty =>
             BadRequest("Can't perform an empty query")
             
           case _    => BadRequest("Can't perform an empty query")
-    }
+    
 
   end httpRoutes
   

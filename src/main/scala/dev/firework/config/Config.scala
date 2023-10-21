@@ -17,7 +17,7 @@ object Config:
       env("SE_DATABASE_USERNAME").default("postgres").as[String],
       env("SE_DATABASE_PASSWORD").default("postgres").as[String].secret,
       env("SE_DATABASE_PORT").default("5432").as[Int],
-      env("SE_API_HTTP_PORT").default("80").as[Int]
+      env("SE_API_HTTP_PORT").default("8080").as[Int]
     ).parMapN(
       
       (dbUrl, dbUser, dbPassword, dbPort, httpPort) =>
@@ -36,7 +36,7 @@ object Config:
           httpServer =
             HttpServerConfig(
               host = ipv4"0.0.0.0",
-              port = Port.fromInt(httpPort).getOrElse(port"80")
+              port = Port.fromInt(httpPort).getOrElse(port"8080")
             )
             
         )
