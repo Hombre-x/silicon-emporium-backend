@@ -9,10 +9,10 @@ import org.http4s.client.*
 import org.http4s.implicits.*
 
 import io.circe.{HCursor, Json, Decoder}
+import io.circe.generic.auto.*
 
 import dev.firework.domain.scrapper.UserQuery
 import dev.firework.domain.search.{BestBuyItem, Item}
-import dev.firework.instances.ItemInstances.given
 
 
 trait BestBuyClient[F[_]]:
