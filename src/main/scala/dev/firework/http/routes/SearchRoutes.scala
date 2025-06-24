@@ -7,6 +7,7 @@ import cats.syntax.all.*
 import org.typelevel.log4cats.Logger
 
 import io.circe.syntax.*
+import io.circe.generic.auto.*
 
 import org.http4s.dsl.impl.*
 import org.http4s.dsl.*
@@ -16,7 +17,6 @@ import org.http4s.circe.*
 
 
 import dev.firework.core.Search
-import dev.firework.instances.ItemInstances.given
 
 
 case class SearchRoutes[F[_]: Sync : Parallel : Logger](
@@ -37,10 +37,7 @@ case class SearchRoutes[F[_]: Sync : Parallel : Logger](
         
         maybeQuery match
           case Some(query) if query.nonEmpty =>
-            search.perform(query)
-              .compile
-              .toList
-              .flatMap(items => Ok(items.asJson))
+            Ok(search.perform(query).map(item => item.asJson))
 
           case Some(query) if query.isEmpty =>
             BadRequest("Can't perform an empty query")
